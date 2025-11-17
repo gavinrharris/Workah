@@ -1,0 +1,57 @@
+    <%- include('partials/header') %>
+
+    <div class="row g-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+        <div class="card-body">
+            <h5 class="mb-3">Search Pokémon</h5>
+            <form action="/searchPokemon" method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Pokémon name</label>
+                <input id="name" type="text" name="name" class="form-control" placeholder="e.g., Bulbasaur" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+            </form>
+        </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card shadow-sm h-100">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">All Pokémon</h5>
+            <span class="badge bg-secondary">Ordered by name</span>
+            </div>
+            <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Base Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% if (pokemon && pokemon.length) { %>
+                    <% pokemon.forEach((p, idx) => { %>
+                    <tr>
+                        <td><%= idx + 1 %></td>
+                        <td><%= p.description %></td>
+                        <td><%= p.base_total %></td>
+                    </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                    <td colspan="3" class="text-center text-muted">No data available.</td>
+                    </tr>
+                <% } %>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <%- include('partials/footer') %>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workah • Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1120;            /* deep blue background to match site */
+      --bg-2: #0f172a;          /* slightly lighter for panels */
+      --text: #e5e7eb;          /* base text */
+      --muted: #a3a3a3;         /* secondary text */
+      --card: #111827cc;        /* glass card */
+      --stroke: #283345;        /* borders */
+      --accent-start: #a855f7;  /* gradient start (violet) */
+      --accent-mid: #d946ef;    /* mid (pink) */
+      --accent-end: #f97316;    /* gradient end (orange) */
+      --success: #22c55e;
+      --danger: #ef4444;
+      --radius-xl: 28px;        /* rounded containers */
+      --radius-lg: 16px;        /* card corners */
+      --radius-md: 12px;        /* inputs */
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 20% -10%, rgba(168,85,247,0.15), transparent 60%),
+                  radial-gradient(900px 700px at 110% 10%, rgba(249,115,22,0.12), transparent 60%),
+                  var(--bg);
+    }
+
+    /* Page frame */
+    .frame {
+      max-width: 1200px;
+      margin: 24px auto 40px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    /* Top nav */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      border-radius: 14px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+    .brand .logo {
+      width: 34px; height: 34px; border-radius: 10px; display:grid; place-items:center;
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      box-shadow: inset 0 0 1px rgba(255,255,255,.45), 0 6px 16px rgba(0,0,0,.35);
+      font-weight: 800; color: white;
+    }
+    .nav-cta {
+      display: inline-flex; gap: 10px; align-items: center;
+    }
+    .btn, button {
+      -webkit-tap-highlight-color: transparent;
+      font-family: inherit;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 12px 18px; border-radius: 999px; border: 1px solid transparent;
+      font-weight: 600; text-decoration: none; cursor: pointer;
+      transition: transform .06s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+      user-select: none;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-ghost { background: transparent; color: var(--text); border-color: rgba(255,255,255,.12); }
+    .btn-ghost:hover { border-color: rgba(255,255,255,.25); }
+    .btn-gradient {
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-mid), var(--accent-end));
+      color: white; box-shadow: 0 6px 18px rgba(168,85,247,.25);
+    }
+
+    /* Main layout */
+    .content {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 28px;
+      padding: 18px;
+      border-radius: 20px;
+      align-items: stretch;
+    }
+    @media (max-width: 920px) {
+      .content { grid-template-columns: 1fr; }
+    }
+
+    /* Left: marketing copy */
+    .panel-left {
+      border-radius: var(--radius-lg);
+      background: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+      position: relative; min-height: 380px; overflow: hidden;
+    }
+    .panel-left::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(11,17,32,0.2) 0%, rgba(11,17,32,.85) 70%);
+    }
+    .left-inner {
+      position: absolute; inset: 0; display:flex; flex-direction:column; justify-content:flex-end; gap: 10px;
+      padding: 28px; z-index: 1;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap:8px; font-size: 12px; font-weight:600; padding:8px 12px; border-radius:999px;
+      background: rgba(17,24,39,.65); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px);
+    }
+    .title {
+      font-size: clamp(24px, 4vw, 40px); line-height: 1.1; font-weight: 800; margin: 8px 0 4px;
+    }
+    .subtitle { color: var(--muted); max-width: 650px; }
+
+    /* Right: login card */
+    .card {
+      background: rgba(17,24,39,.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .card h2 { margin: 0 0 6px; font-size: 22px; }
+    .card p.muted { margin: 0 0 22px; color: var(--muted); }
+
+    .form-row { display: grid; gap: 12px; margin-bottom: 14px; }
+    .label { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+    .input {
+      width: 100%; padding: 14px 14px; border-radius: var(--radius-md);
+      border: 1px solid rgba(255,255,255,.12); background: rgba(2,6,23,.6);
+      color: var(--text); outline: none; transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .input::placeholder { color: #637083; }
+    .input:focus { border-color: rgba(168,85,247,.6); box-shadow: 0 0 0 4px rgba(168,85,247,.18); }
+
+    .row-split { display:flex; align-items:center; justify-content:space-between; gap: 10px; margin: 10px 0 18px; }
+    .checkbox { display:flex; align-items:center; gap:10px; font-size: 13px; color: var(--muted); }
+    .checkbox input { width: 16px; height: 16px; }
+
+    .actions { display:flex; flex-direction: column; gap: 12px; }
+    .btn-block { width: 100%; }
+    .btn-outline { background: transparent; border-color: rgba(255,255,255,.15); color: var(--text); }
+    .btn-outline:hover { border-color: rgba(255,255,255,.3); }
+
+    .divider { display:flex; align-items:center; gap:12px; margin: 18px 0; color: var(--muted); font-size: 12px; }
+    .divider::before, .divider::after { content:""; flex:1; height:1px; background: rgba(255,255,255,.1); }
+
+    .meta { margin-top: 14px; color: var(--muted); font-size: 14px; }
+    .meta a { color: #c4b5fd; text-decoration: none; }
+    .meta a:hover { text-decoration: underline; }
+
+    footer { margin-top: 26px; text-align: center; color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <header class="nav">
+      <a class="brand" href="index.html" aria-label="Workah home">
+        <span class="logo">W</span>
+        <span>Workah</span>
+      </a>
+      <div class="nav-cta">
+        <a class="btn btn-ghost" href="/">Search Jobs</a>
+        <a class="btn btn-gradient" href="login_page.html">Get Started / Login</a>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- Left side matches landing vibe -->
+      <section class="panel-left" aria-hidden="true">
+        <div class="left-inner">
+          <span class="badge">🔒 Parent‑Trusted • Teen‑Friendly</span>
+          <h1 class="title">The best place for teens to find safe, nearby jobs.</h1>
+          <p class="subtitle">Log in to apply for jobs, track applications, and message local businesses. 
+            Workah follows all U.S. youth labor laws; opportunities for 14–15 year‑olds are limited to non‑hazardous roles.</p>
+        </div>
+      </section>
+
+      <!-- Right side: login card -->
+      <section class="card" aria-label="Login form">
+        <h2>Welcome back</h2>
+        <p class="muted">Sign in to your Workah account</p>
+        <form action="/login" method="post" novalidate>
+          <div class="form-row">
+            <label class="label" for="email">Email</label>
+            <input class="input" type="email" id="email" name="email" placeholder="you@example.com" required />
+          </div>
+
+          <div class="form-row">
+            <label class="label" for="password">Password</label>
+            <input class="input" type="password" id="password" name="password" placeholder="••••••••" required />
+          </div>
+
+          <div class="row-split">
+            <label class="checkbox"><input type="checkbox" id="remember" name="remember" /> Remember me</label>
+            <a href="#" class="meta">Forgot password?</a>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-gradient btn-block" type="submit">Login</button>
+            <a class="btn btn-outline btn-block" href="signup.html">Create a new account</a>
+          </div>
+
+          <div class="divider">or continue with</div>
+          <div class="actions">
+            <button class="btn btn-ghost btn-block" type="button" aria-label="Continue with Google">Continue with Google</button>
+            <button class="btn btn-ghost btn-block" type="button" aria-label="Continue with Apple">Continue with Apple</button>
+          </div>
+
+          <p class="meta">By continuing, you agree to Workah's <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+        </form>
+
+        <footer>
+          Having trouble? <a href="mailto:support@workah.example" class="meta">Contact support</a>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Optional: simple password visibility toggle (accessible)
+    // You can add an eye icon later; keeping JS minimal here to avoid extra assets.
+  </script>
+</body>
+</html>

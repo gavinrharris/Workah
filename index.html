@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Workah — Teen Jobs Near You</title>
+  <meta name="description" content="Workah helps teens (14–17) find safe, age-appropriate jobs near home. Trusted by parents.">
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Summer / Instagram-like gradient */
+      --grad-1:#ff7a59; /* coral */
+      --grad-2:#ffb347; /* peach/orange */
+      --grad-3:#9b5cf6; /* purple */
+      --bg:#0b1020;         /* deep blue-black background */
+      --ink:#0f172a;        /* body text for light sections */
+      --muted:#6b7280;
+      --card:#ffffff;
+      --ring:rgba(155,92,246,.30);
+      --shadow:0 20px 45px rgba(2,6,23,.20);
+      --radius-xl:28px;
+      --radius-lg:18px;
+      --radius-md:14px;
+      --btn-radius:999px;   /* pill buttons */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,Segoe UI,Arial,Helvetica,sans-serif;
+      color:var(--ink);
+      background:#0e1326;
+      -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    }
+    a{color:#fff;text-decoration:none}
+    .container{max-width:1180px;margin:0 auto;padding:28px}
+
+    /* NAV */
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:6px 0}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:800;font-size:20px;color:#fff}
+    .logo{
+      width:36px;height:36px;border-radius:12px;
+      background:conic-gradient(from 220deg,var(--grad-3),var(--grad-1),var(--grad-2),var(--grad-3));
+      display:grid;place-items:center;color:#fff;box-shadow:0 8px 22px rgba(155,92,246,.35);font-weight:900
+    }
+    .nav-actions{display:flex;gap:12px;align-items:center}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:11px 18px;border-radius:var(--btn-radius);
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      color:#fff;font-weight:600;backdrop-filter:blur(6px);
+      transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+    .btn.primary{
+      border:none;
+      background:linear-gradient(90deg,var(--grad-3),var(--grad-1),var(--grad-2));
+      box-shadow:0 12px 28px rgba(155,92,246,.35);
+    }
+
+    /* HERO (dark, Apple-like) */
+    .hero-wrap{
+      position:relative;
+      border-radius:var(--radius-xl);
+      overflow:hidden;
+      height:min(76vh,720px);
+      box-shadow:var(--shadow);
+      margin-top:18px;
+    }
+    .hero-bg{
+      position:absolute;inset:0;background:#000;
+      background-image:
+        linear-gradient( to bottom, rgba(0,0,0,.45), rgba(0,0,0,.65) ),
+        radial-gradient(1200px 600px at 80% 10%, rgba(155,92,246,.25), transparent 60%),
+        url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1600&q=80');
+      background-size:cover; background-position:center;
+      filter:saturate(1.1) contrast(1.04);
+    }
+    .hero{
+      position:relative; z-index:1; height:100%;
+      display:grid; place-items:center; text-align:center; color:#fff; padding:0 24px;
+    }
+    .badge{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:8px 12px;border-radius:var(--btn-radius);
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+      font-weight:600;color:#f3f4f6;font-size:12px;margin-bottom:12px
+    }
+    .hero h1{font-size: clamp(36px, 6vw, 64px); line-height:1.06; margin:10px 0 14px}
+    .hero p{max-width:760px;margin:0 auto 20px;color:#e5e7eb;font-size:18px}
+    .hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+    /* SEARCH STRIP (glass card sitting below hero) */
+    .search{
+      margin:56px auto 0;
+      transform:translateY(-36px);
+      background:rgba(255,255,255,.9);
+      border:1px solid #e8eaf1;border-radius:var(--radius-xl);
+      backdrop-filter:blur(6px);
+      box-shadow:0 20px 40px rgba(2,6,23,.18);
+      padding:18px 18px 8px;
+      max-width:980px;
+    }
+    .row{display:grid;gap:14px;grid-template-columns:1.1fr .9fr 1.4fr}
+    .field{display:flex;flex-direction:column;gap:6px}
+    label{font-weight:700;font-size:12px;color:#374151;letter-spacing:.2px}
+    input[type="text"], select{
+      height:46px;border-radius:14px;border:1px solid #e5e7eb;padding:0 12px;font-size:15px;background:#fff;outline:none
+    }
+    input[type="text"]:focus, select:focus{box-shadow:0 0 0 6px var(--ring);border-color:#c7b9ff}
+
+    /* Slider */
+    .slider-wrap{display:flex;align-items:center;gap:12px}
+    .slider-wrap output{min-width:72px;text-align:right;font-weight:700;color:#111827}
+    input[type="range"]{
+      -webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:8px;background:#e5e7eb;outline:none
+    }
+    input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;
+      background:linear-gradient(90deg,var(--grad-3),var(--grad-1),var(--grad-2));
+      border:none;box-shadow:0 6px 14px rgba(155,92,246,.35);cursor:pointer
+    }
+    .filter-chips{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 6px}
+    .chip{
+      border:1px solid #e5e7eb;border-radius:999px;padding:8px 12px;background:#fff;font-weight:600;color:#0f172a;
+    }
+    .chip.muted{color:#6b7280;font-weight:500}
+    .search .btn.primary{color:#fff}
+
+    /* TRUST STATS */
+    .spacer{height:48px}
+    .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin:26px 0}
+    .card{
+      background:#fff;border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow);border:1px solid #eef0f6
+    }
+    .stat{font-size:34px;font-weight:900}
+    .muted{color:#6b7280}
+
+    /* Testimonials & Legal */
+    .section{margin:60px 0}
+    .section h2{margin:0 0 12px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .review .who{font-weight:800}
+    .stars{letter-spacing:2px;margin:6px 0}
+    .legal{
+      margin:64px 0;display:grid;grid-template-columns:1.2fr .8fr;gap:24px
+    }
+    .legal .card{background:#f8fafc}
+
+    /* Footer (dark strip to echo hero) */
+    footer{
+      background:linear-gradient(90deg,var(--grad-3),var(--grad-1),var(--grad-2));
+      color:#fff;text-align:center;padding:28px;border-top-left-radius:22px;border-top-right-radius:22px;
+      margin-top:80px
+    }
+    footer small{opacity:.9}
+
+    /* Responsive */
+    @media (max-width: 1020px){
+      .row{grid-template-columns:1fr 1fr}
+      .grid,.trust{grid-template-columns:1fr}
+      .legal{grid-template-columns:1fr}
+      .search{transform:none;margin:22px auto 0}
+    }
+  </style>
+</head>
+<body>
+  <!-- DARK HERO -->
+  <div class="container" style="padding-bottom:0">
+    <nav class="nav">
+      <div class="brand">
+        <div class="logo">W</div>
+        Workah
+      </div>
+      <div class="nav-actions">
+        <a class="btn" href="#search">Search Jobs</a>
+        <a class="btn" href="#reviews">Reviews</a>
+        <a class="btn primary" href="login.html">Get Started / Login</a>
+      </div>
+    </nav>
+
+    <section class="hero-wrap">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero">
+        <div>
+          <span class="badge">🔒 Parent-Trusted • Teen-Friendly</span>
+          <h1>The best place for teens to find safe, nearby jobs.</h1>
+          <p>Discover age-appropriate opportunities within walking distance. Built for summer energy, school-year balance, and parental peace of mind.</p>
+          <div class="hero-cta">
+            <a class="btn primary" href="#search">Find jobs near me</a>
+            <a class="btn" href="login.html">Get Started / Login</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- SEARCH (glass) -->
+  <section id="search" class="search">
+    <div class="row">
+      <div class="field">
+        <label for="zip">ZIP Code</label>
+        <input id="zip" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g., 84602">
+      </div>
+
+      <div class="field">
+        <label for="radius">Radius (miles)</label>
+        <div class="slider-wrap">
+          <input id="radius" type="range" min="1" max="20" step="1" value="3" />
+          <output id="radiusOut">3 mi</output>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="age">Age filter</label>
+        <select id="age">
+          <option selected>14–15 (non-hazardous, hour limits)</option>
+          <option>16–17 (non-hazardous)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-chips">
+      <span class="chip">Retail helper</span>
+      <span class="chip">Food service (host/runner)</span>
+      <span class="chip">Tutoring</span>
+      <span class="chip">Yardwork</span>
+      <span class="chip muted">More coming soon…</span>
+      <a class="btn primary" href="#catalog" aria-disabled="true">Search (demo)</a>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="spacer"></div>
+
+    <!-- TRUST STATS -->
+    <section class="trust">
+      <div class="card">
+        <div class="stat">4.9★</div>
+        <div class="muted">Average teen rating</div>
+      </div>
+      <div class="card">
+        <div class="stat">12k+</div>
+        <div class="muted">Successful summer matches</div>
+      </div>
+      <div class="card">
+        <div class="stat">99%</div>
+        <div class="muted">Profiles verified for safety</div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="reviews" class="section">
+      <h2 style="font-size:28px;margin-bottom:8px">What teens & parents say</h2>
+      <div class="grid">
+        <div class="card review">
+          <div class="stars">★★★★★</div>
+          <p>“Found a weekend job 2 miles from home. Hours work great with school!”</p>
+          <div class="who">— Alex, 16</div>
+        </div>
+        <div class="card review">
+          <div class="stars">★★★★★</div>
+          <p>“My daughter learned budgeting and responsibility. The safety checks reassured us.”</p>
+          <div class="who">— Maria, Parent</div>
+        </div>
+        <div class="card review">
+          <div class="stars">★★★★★</div>
+          <p>“Perfect for summer — applied on Monday, interview by Friday.”</p>
+          <div class="who">— Jordan, 17</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEGAL QUICK GUIDE -->
+    <section class="legal">
+      <div class="card">
+        <h2 style="margin-top:0">Know the rules (quick guide)</h2>
+        <ul>
+          <li><strong>Minimum age:</strong> Generally 14 for most non-ag jobs.</li>
+          <li><strong>14–15:</strong> Limited hours, outside school, non-hazardous roles.</li>
+          <li><strong>16–17:</strong> No federal hour limits; still <em>no hazardous work</em> until 18.</li>
+          <li><strong>Permits & consent:</strong> Many states require a work permit/parent OK. Check your state.</li>
+        </ul>
+        <p class="muted" style="margin-top:8px">
+          Sources: U.S. DOL YouthRules & Child Labor Fact Sheets. Always follow federal & state laws.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Helpful links</h3>
+        <ul>
+          <li><a href="https://www.dol.gov/agencies/whd/youthrules" target="_blank" rel="noopener" style="color:#2563eb">DOL YouthRules (overview)</a></li>
+          <li><a href="https://www.dol.gov/agencies/whd/fact-sheets/43-child-labor-non-agriculture" target="_blank" rel="noopener" style="color:#2563eb">Fact Sheet: Non-ag Jobs</a></li>
+          <li><a href="https://www.dol.gov/agencies/whd/state/child-labor" target="_blank" rel="noopener" style="color:#2563eb">State-by-State rules</a></li>
+        </ul>
+        <p class="muted" style="font-size:13px">This site is a demo. Search results coming soon.</p>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    © <span id="yr"></span> Workah • Safe teen jobs near you.
+    <br><small>Workah is not an employer. Always verify age and permits required by your state.</small>
+  </footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Slider label
+    const slider = document.getElementById('radius');
+    const out = document.getElementById('radiusOut');
+    const setLabel = () => out.textContent = slider.value + ' mi';
+    slider.addEventListener('input', setLabel);
+    setLabel();
+
+    // Demo search block
+    const demoBtn = document.querySelector('a[aria-disabled="true"]');
+    demoBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert("Search results will appear here in a future update. This is a demo landing page.");
+    });
+  </script>
+</body>
+</html>

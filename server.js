@@ -6,7 +6,7 @@ const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const knex = require("knex")({
+const db = knex({
     client: 'pg',
     connection: {
         host: process.env.RDS_HOSTNAME || "localhost",

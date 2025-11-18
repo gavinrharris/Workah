@@ -15,7 +15,8 @@
         password: process.env.RDS_PASSWORD || "SuperSecretPassword",
         database: process.env.RDS_DB_NAME || "pokemon",
         port: process.env.RDS_PORT || process.env.DB_PORT || 5432,
-        ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false }: false,
+        ssl: { rejectUnauthorized: false }
+        // ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false }: false,
     },
     });
 

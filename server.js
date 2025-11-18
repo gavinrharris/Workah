@@ -2,7 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const db = require('./db');
+const knex = require('knex');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,9 +25,7 @@ app.use(express.urlencoded({ extended: true }));    // to parse form data. leer 
 // Route: Home - show all Pokémon ordered by name
 app.get('/', async (req, res) => {
     try {
-    const { rows } = await db.query(
-      'SELECT * FROM pokemon ORDER BY description ASC'
-    );
+    const rows = await db('pokemon').orderBy("description", "asc");
     res.render('index', { pokemon: rows });
 } catch (err) {
     console.error(err);
@@ -48,16 +46,16 @@ app.post('/searchPokemon', async (req, res) => {
     }
 
     try {
-    const result = await db.query(
-        'SELECT description, base_total FROM pokemon WHERE description ILIKE $1 LIMIT 1',
-        [name.trim()]
-    );
+    const result = await db('pokemon')
+        .select('description', 'base_total')
+        .whereILike('description', name.trim())
+        .first();
 
-    if (result.rowCount > 0) {
+    if (result) {
         res.render('result', {
         found: true,
         message: 'Pokémon found!',
-        data: result.rows[0]
+        data: result
         });
     } else {
         res.render('result', {

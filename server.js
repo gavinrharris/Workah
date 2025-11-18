@@ -1,73 +1,80 @@
-// server.js
-require('dotenv').config();
-const express = require('express');
-const path = require('path');
-const knex = require('knex');
+    // server.js
+    require('dotenv').config();
+    const express = require('express');
+    const path = require('path');
+    const knex = require('knex');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-const db = knex({
+    const app = express();
+    const PORT = process.env.PORT || 3000;
+
+    const db = knex({
     client: 'pg',
     connection: {
         host: process.env.RDS_HOSTNAME || "localhost",
         user: process.env.RDS_USERNAME || "postgres",
         password: process.env.RDS_PASSWORD || "SuperSecretPassword",
         database: process.env.RDS_DB_NAME || "pokemon",
-        port: process.env.RDS_PORT || 5432
-    }
-});
+       port: process.env.RDS_PORT || process.env.DB_PORT || 5432,
+        ssl:
+        process.env.DB_SSL === 'true'
+            ? { rejectUnauthorized: false }
+            : undefined,
+    },
+    });
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));// absolute route to views folder
-app.use('/public', express.static(path.join(__dirname, 'public'))); // static files middleware
-app.use(express.urlencoded({ extended: true }));    // to parse form data. leer form body
+    app.set('view engine', 'ejs');
+    app.set('views', path.join(__dirname, 'views'));
+    app.use('/public', express.static(path.join(__dirname, 'public')));
+    app.use(express.urlencoded({ extended: true }));
 
-// Route: Home - show all Pokémon ordered by name
-app.get('/', async (req, res) => {
+    // Home – lista Pokémon
+    app.get('/', async (req, res) => {
     try {
-    const rows = await db('pokemon').orderBy("description", "asc");
-    res.render('index', { pokemon: rows });
-} catch (err) {
-    console.error(err);
-    res.status(500).send('Error loading Pokémon');
+        const rows = await db('pokemon').orderBy('description', 'asc');
+        res.render('index', { pokemon: rows });
+    } catch (err) {
+        console.error('Error en GET /:', err);
+        res.status(500).send('Error loading Pokémon');
     }
-});
+    });
 
-// Route: searchPokemon
-app.post('/searchPokemon', async (req, res) => {
+    // Buscar Pokémon
+    app.post('/searchPokemon', async (req, res) => {
     const { name } = req.body;
 
     if (!name || !name.trim()) {
-    return res.render('result', {
+        return res.render('result', {
         found: false,
         message: 'Please enter a Pokémon name',
-        data: null
-    });
+        data: null,
+        });
     }
 
     try {
-    const result = await db('pokemon')
+        const result = await db('pokemon')
         .select('description', 'base_total')
-        .whereILike('description', name.trim())
+        .whereILike('description', `%${name.trim()}%`)
         .first();
 
-    if (result) {
+        if (result) {
         res.render('result', {
-        found: true,
-        message: 'Pokémon found!',
-        data: result
+            found: true,
+            message: 'Pokémon found!',
+            data: result,
         });
-    } else {
+        } else {
         res.render('result', {
-        found: false,
-        message: 'No Pokémon found with that name.',
-        data: null
+            found: false,
+            message: 'No Pokémon found with that name.',
+            data: null,
         });
-    }
+        }
     } catch (err) {
-    console.error(err);
-    res.status(500).send('Search error');
+        console.error('Error en POST /searchPokemon:', err);
+        res.status(500).send('Search error');
     }
-});
+    });
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+    app.listen(PORT, () =>
+    console.log(`Server running on http://localhost:${PORT}`)
+    );

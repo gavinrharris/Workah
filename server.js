@@ -14,11 +14,8 @@
         user: process.env.RDS_USERNAME || "postgres",
         password: process.env.RDS_PASSWORD || "SuperSecretPassword",
         database: process.env.RDS_DB_NAME || "pokemon",
-       port: process.env.RDS_PORT || process.env.DB_PORT || 5432,
-        ssl:
-        process.env.DB_SSL === 'true'
-            ? { rejectUnauthorized: false }
-            : undefined,
+        port: process.env.RDS_PORT || process.env.DB_PORT || 5432,
+        ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false }: false,
     },
     });
 

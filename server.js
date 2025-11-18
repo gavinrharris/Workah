@@ -6,6 +6,16 @@ const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const knex = require("knex")({
+    client: 'pg',
+    connection: {
+        host: process.env.RDS_HOSTNAME || "localhost",
+        user: process.env.RDS_USERNAME || "postgres",
+        password: process.env.RDS_PASSWORD || "SuperSecretPassword",
+        database: process.env.RDS_DB_NAME || "pokemon",
+        port: process.env.RDS_PORT || 5432
+    }
+});
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));// absolute route to views folder
